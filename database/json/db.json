@@ -1,0 +1,22 @@
+[
+    {
+        "email":"abc123@gmail.com",
+        "city":"bharuch",
+        "age":20
+    },
+    {
+        "email":"abc@gmail.com",
+        "city":"bharuch",
+        "age":20
+    },
+    {
+        "email":"abc1@gmail.com",
+        "city":"bharuch",
+        "age":20
+    },
+    {
+        "email":"abc12@gmail.com",
+        "city":"bharuch",
+        "age":20
+    }
+]
