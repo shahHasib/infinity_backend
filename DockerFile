@@ -1,42 +1,29 @@
-# Use official PHP image with FPM
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    curl \
-    git \
-    sqlite3 \
-    libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite zip gd
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
+    libpq-dev default-mysql-client \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
 
-# Install Composer globally
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy application files
+# Copy application code
 COPY . .
 
-# Install PHP dependencies
+# Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Generate Laravel APP_KEY
-RUN php artisan key:generate
-
-# Set permissions for Laravel
+# Set permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
-# Expose Laravel default port
+# Expose Laravel port
 EXPOSE 8000
 
-# Run Laravel app with artisan serve
+# Start Laravel using Artisan
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
